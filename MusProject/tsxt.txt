@@ -1,0 +1,26 @@
+
+import json
+import os
+from flask import Flask,jsonify,request
+from flask_cors import CORS
+from model_pickle import model
+
+app = Flask(__name__)
+CORS(app)
+@app.route("/model/",methods=['GET'])
+def return_price():
+  age = request.args.get('age')
+  sex = request.args.get('sex')
+  music_dict = model.predict([[age,sex]]) 
+  music_dict = {
+                'model':'mlp',
+                'price': price,
+                }
+  return jsonify(music_dict)
+
+@app.route("/",methods=['GET'])
+def default():
+  return "<h1> Welcome to bitcoin price predictor <h1>"
+
+if __name__ == "__main__":
+    app.run()
